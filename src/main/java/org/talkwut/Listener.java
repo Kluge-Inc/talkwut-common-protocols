@@ -2,6 +2,8 @@ package org.talkwut;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.springframework.amqp.core.Message;
+import org.springframework.beans.factory.annotation.Autowired;
+import talkwut.notifier.Protocol;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,9 +12,15 @@ import org.springframework.amqp.core.Message;
  * Time: 12:58
  */
 public class Listener {
-    public void listen(Message message) throws InvalidProtocolBufferException {
-        //TODO: Parse message here
-        //Like this Protocol.EMail eMail = Protocol.EMail.parseFrom(message.getBody());
+    @Autowired
+    private Mailer mailer;
 
+    public void listen(Message message) throws InvalidProtocolBufferException {
+        Protocol.EMail eMail = Protocol.EMail.parseFrom(message.getBody());
+        mailer.sendMail(
+                eMail.getFrom(),
+                eMail.getEmails(0),
+                eMail.getMessage().getTitle(),
+                eMail.getMessage().getMessage());
     }
 }

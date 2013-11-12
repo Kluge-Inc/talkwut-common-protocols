@@ -13,5 +13,5 @@
     </rabbit:listener-container>
 
     <bean id="listener" class="org.talkwut.Listener" />
-
+    <import resource="classpath:"/>
 </beans>
